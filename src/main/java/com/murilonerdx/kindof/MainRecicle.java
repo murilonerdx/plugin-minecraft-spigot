@@ -193,6 +193,7 @@ public final class MainRecicle extends JavaPlugin implements Listener {
     }
 
     public void pottionEffect(PlayerJoinEvent e) {
+        particles(e);
         e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SPEED,
                 1000, 100));
 
@@ -241,6 +242,11 @@ public final class MainRecicle extends JavaPlugin implements Listener {
         projectile(e);
     }
 
+    public void particles(PlayerJoinEvent e){
+        Player player = e.getPlayer();
+        player.spawnParticle(Particle.LAVA, player.getLocation(), 5);
+    }
+
     public void projectile(PlayerInteractEvent e) {
         Player player = e.getPlayer();
         if (e.getHand().equals(EquipmentSlot.HAND)) {
@@ -251,7 +257,6 @@ public final class MainRecicle extends JavaPlugin implements Listener {
                 }
             }
         }
-
     }
 
 }
