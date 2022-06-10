@@ -187,6 +187,8 @@ public final class MainRecicle extends JavaPlugin implements Listener {
 
         meta.setPower(1);
         firework.setFireworkMeta(meta);
+
+        songSneak(e);
     }
 
     public void pottionEffect(PlayerJoinEvent e){
@@ -221,6 +223,10 @@ public final class MainRecicle extends JavaPlugin implements Listener {
         }
 
         return input;
+    }
+
+    public void songSneak(PlayerToggleSneakEvent e){
+        e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.ENTITY_ARMOR_STAND_BREAK, 1.0F,1.0F);
     }
 
 }
