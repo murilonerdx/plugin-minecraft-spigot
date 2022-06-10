@@ -4,6 +4,7 @@ import com.murilonerdx.kindof.commands.HealCommand;
 import com.murilonerdx.kindof.commands.MessageCommand;
 import com.murilonerdx.kindof.commands.ReplyCommand;
 import com.murilonerdx.kindof.config.ConfigCommand;
+import com.murilonerdx.kindof.listerner.ToggleListener;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
@@ -68,13 +69,14 @@ public final class MainRecicle extends JavaPlugin implements Listener {
 //        ItemMeta meta = itemStack.getItemMeta();
 //        itemStack.setItemMeta(meta);
 
+
         pluginManager();
         bossBar();
     }
 
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
-        Bukkit.getPluginManager().registerEvents(this, this);
+        Bukkit.getPluginManager().registerEvents(new ToggleListener(), this);
     }
 
     public void item(PlayerJoinEvent e) {
