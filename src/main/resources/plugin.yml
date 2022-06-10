@@ -1,0 +1,19 @@
+name: Kindof
+version: '${project.version}'
+main: com.murilonerdx.kindof.MainRecicle
+api-version: 1.18
+authors: [ murilonerdx ]
+description: Servidor de minecraft sem custo
+website: http://github.com/murilonerdx
+commands:
+  heal:
+    description: Teste heal
+  config:
+    description: Configuration
+  message:
+    description: Enviar uma mensagem
+  reply:
+    description: Responder uma mensagem
+
+
+
