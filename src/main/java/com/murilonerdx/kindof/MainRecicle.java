@@ -14,13 +14,13 @@ import org.bukkit.boss.BossBar;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerToggleSneakEvent;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.event.server.ServerListPingEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -117,11 +117,11 @@ public final class MainRecicle extends JavaPlugin implements Listener {
     }
 
     public void pluginManager() {
-        Bukkit.getPluginManager().registerEvents(this,this);
+        Bukkit.getPluginManager().registerEvents(this, this);
     }
 
     @EventHandler
-    public void onSneak(PlayerToggleSneakEvent e){
+    public void onSneak(PlayerToggleSneakEvent e) {
         seak(e);
     }
 
@@ -142,12 +142,12 @@ public final class MainRecicle extends JavaPlugin implements Listener {
         e.setServerIcon(Bukkit.loadServerIcon(new File(System.getProperty("user.dir") + "minecraft-block.png")));
     }
 
-    public void joinListPlayers(PlayerJoinEvent e){
+    public void joinListPlayers(PlayerJoinEvent e) {
         e.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR,
                 TextComponent.fromLegacyText("HELLO MY FRIEND"));
     }
 
-    public void playerHeaderFooter(PlayerJoinEvent e){
+    public void playerHeaderFooter(PlayerJoinEvent e) {
         e.getPlayer().setPlayerListHeaderFooter(ChatColor.RED + "Hello",
                 "First Line\nSecond Line!");
     }
@@ -160,7 +160,7 @@ public final class MainRecicle extends JavaPlugin implements Listener {
         Objects.requireNonNull(getCommand("heal")).setExecutor(new HealCommand());
     }
 
-    public void bossBar(){
+    public void bossBar() {
         bossBar = Bukkit.createBossBar(
                 ChatColor.LIGHT_PURPLE + "Esse servidor é incrivel",
                 BarColor.PINK,
@@ -172,11 +172,11 @@ public final class MainRecicle extends JavaPlugin implements Listener {
     }
 
     @EventHandler
-    public void onJoin2(PlayerJoinEvent e){
+    public void onJoin2(PlayerJoinEvent e) {
         bossBar.addPlayer(e.getPlayer());
     }
 
-    public void seak(PlayerToggleSneakEvent e){
+    public void seak(PlayerToggleSneakEvent e) {
         Firework firework = e.getPlayer().getWorld()
                 .spawn(e.getPlayer().getLocation(), Firework.class);
         FireworkMeta meta = (FireworkMeta) firework.getFireworkMeta();
@@ -188,35 +188,36 @@ public final class MainRecicle extends JavaPlugin implements Listener {
         meta.setPower(1);
         firework.setFireworkMeta(meta);
 
+        sneakEffectSound(e);
         songSneak(e);
     }
 
-    public void pottionEffect(PlayerJoinEvent e){
+    public void pottionEffect(PlayerJoinEvent e) {
         e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SPEED,
                 1000, 100));
 
     }
 
-    public void removeEffect(PlayerJoinEvent e){
-        for(PotionEffect effect : e.getPlayer().getActivePotionEffects()){
+    public void removeEffect(PlayerJoinEvent e) {
+        for (PotionEffect effect : e.getPlayer().getActivePotionEffects()) {
             e.getPlayer().removePotionEffect(effect.getType());
         }
     }
 
-    public void changeTimeWorld(){
+    public void changeTimeWorld() {
         Player player = null;
         player.getWorld().setTime(6000);
     }
 
     @EventHandler
-    public void onChatEffect(AsyncPlayerChatEvent e){
+    public void onChatEffect(AsyncPlayerChatEvent e) {
         e.setMessage(translate(e.getMessage()));
     }
 
     //   #b122a3T #b936a4e #c04aa5s #c85ea6t #cf72a7e  #d787a8m #df9ba9u #e6afaar #eec3abi #f5d7acl #fdebado
-    private String translate(String input){
+    private String translate(String input) {
         Matcher matcher = Pattern.compile("#[a-zfA-ZF0-9.,-_]{6}").matcher(input);
-        while(matcher.find()){
+        while (matcher.find()) {
             String color = input.substring(matcher.start(), matcher.end());
             input = input.replace(color, net.md_5.bungee.api.ChatColor.of(color) + "");
             matcher = Pattern.compile("#[a-zfA-ZF0-9.,-_]{6}").matcher(input);
@@ -225,8 +226,32 @@ public final class MainRecicle extends JavaPlugin implements Listener {
         return input;
     }
 
-    public void songSneak(PlayerToggleSneakEvent e){
-        e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.ENTITY_ARMOR_STAND_BREAK, 1.0F,1.0F);
+    public void songSneak(PlayerToggleSneakEvent e) {
+        e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.ENTITY_ARMOR_STAND_BREAK, 1.0F, 1.0F);
+    }
+
+    public void sneakEffectSound(PlayerToggleSneakEvent e) {
+        if (e.isCancelled()) {
+            e.getPlayer().playEffect(e.getPlayer().getLocation(), Effect.RECORD_PLAY, Material.MUSIC_DISC_11);
+        }
+    }
+
+    @EventHandler
+    public void onPlayerInteract(PlayerInteractEvent e){
+        projectile(e);
+    }
+
+    public void projectile(PlayerInteractEvent e) {
+        Player player = e.getPlayer();
+        if (e.getHand().equals(EquipmentSlot.HAND)) {
+            if (e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+                player.getInventory().getItemInMainHand();
+                if (player.getInventory().getItemInMainHand().getType().equals(Material.DIAMOND_HOE)) {
+                    player.launchProjectile(Egg.class, player.getLocation().getDirection());
+                }
+            }
+        }
+
     }
 
 }
