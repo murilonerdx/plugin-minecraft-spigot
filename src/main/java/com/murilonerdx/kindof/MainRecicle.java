@@ -2,6 +2,7 @@ package com.murilonerdx.kindof;
 
 import com.murilonerdx.kindof.commands.HealCommand;
 import com.murilonerdx.kindof.commands.MessageCommand;
+import com.murilonerdx.kindof.commands.PunishCommand;
 import com.murilonerdx.kindof.commands.ReplyCommand;
 import com.murilonerdx.kindof.config.ConfigCommand;
 import com.murilonerdx.kindof.listerner.ToggleListener;
@@ -48,6 +49,7 @@ public final class MainRecicle extends JavaPlugin implements Listener {
     public void onEnable() {
 //        getCommand("message").setExecutor(new MessageCommand(this));
 //        getCommand("reply").setExecutor(new ReplyCommand(this));
+        Objects.requireNonNull(getCommand("punish")).setExecutor(new PunishCommand());
 //
 //        recentMessages = new HashMap<>();
 //
