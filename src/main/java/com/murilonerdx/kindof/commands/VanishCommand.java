@@ -13,7 +13,6 @@ import java.util.UUID;
 public class VanishCommand implements CommandExecutor {
     List<UUID> vanished = new ArrayList<>();
 
-
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if(sender instanceof Player){
@@ -27,7 +26,6 @@ public class VanishCommand implements CommandExecutor {
                 player.sendMessage("Você está visivel");
             }else{
                 vanished.add(player.getUniqueId());
-
                 for(Player target : Bukkit.getOnlinePlayers()){
                     target.hidePlayer(player);
                 }

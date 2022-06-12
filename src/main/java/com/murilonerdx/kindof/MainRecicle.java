@@ -9,6 +9,7 @@ import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
@@ -40,7 +41,7 @@ import java.util.regex.Pattern;
 public final class MainRecicle extends JavaPlugin implements Listener {
 
     private HashMap<UUID, UUID> recentMessages;
-
+    boolean active = true;
     private BossBar bossBar;
 
     @Override
@@ -249,7 +250,7 @@ public final class MainRecicle extends JavaPlugin implements Listener {
         player.spawnParticle(Particle.LAVA, player.getLocation(), 5);
     }
 
-    public void projectile(PlayerInteractEvent e) {
+    public void projectiles(PlayerInteractEvent e) {
         Player player = e.getPlayer();
         if (e.getHand().equals(EquipmentSlot.HAND)) {
             if (e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
@@ -258,6 +259,143 @@ public final class MainRecicle extends JavaPlugin implements Listener {
                     player.launchProjectile(Egg.class, player.getLocation().getDirection());
                 }
             }
+        }
+    }
+
+
+
+    public void sneak(PlayerToggleSneakEvent e) {
+        Firework firework = e.getPlayer()
+                .getWorld().spawn(e.getPlayer().getLocation(), Firework.class);
+
+        FireworkMeta metaFirework = firework.getFireworkMeta();
+        metaFirework.addEffect(FireworkEffect.builder()
+                .withColor(Color.RED)
+                .withColor(Color.LIME)
+                .with(FireworkEffect.Type.CREEPER)
+                .withFlicker().build());
+
+        metaFirework.setPower(1);
+        firework.setFireworkMeta(metaFirework);
+    }
+
+//    @EventHandler
+//    public void pottionEffect(PlayerJoinEvent e){
+//        e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SPEED,
+//                1000,
+//                100,
+//                false, false,false));
+//    }
+
+    @EventHandler
+    public void projectile(PlayerInteractEvent e) {
+        Player player = e.getPlayer();
+        if (Objects.equals(e.getHand(), EquipmentSlot.HAND)) {
+            if (e.getAction().equals(Action.LEFT_CLICK_AIR)) {
+                if (player.getInventory().getItemInMainHand().getType().equals(Material.NETHER_STAR)) {
+                    player.launchProjectile(EnderPearl.class, player.getLocation().getDirection());
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void projectile2(PlayerInteractEvent e) {
+        Player player = e.getPlayer();
+        if (Objects.equals(e.getHand(), EquipmentSlot.HAND)) {
+            if (e.getAction().equals(Action.LEFT_CLICK_AIR) && player.getInventory().getItemInMainHand().getType().equals(Material.AIR)) {
+                Arrow shot = player.launchProjectile(Arrow.class, player.getLocation().getDirection());
+                shot.setVelocity(shot.getVelocity().multiply(20.0));
+            }
+        }
+    }
+
+    @EventHandler
+    public void projectile3(PlayerInteractEvent e) {
+        Player player = e.getPlayer();
+        if (Objects.equals(e.getHand(), EquipmentSlot.HAND)) {
+            if (e.getAction().equals(Action.LEFT_CLICK_AIR) && player.getInventory().getItemInMainHand().getType().equals(Material.GOLD_INGOT)) {
+                player.playSound(player.getLocation(), Sound.ENTITY_GHAST_SHOOT, 1.0f, 1.0f);
+                SmallFireball shot = player.launchProjectile(SmallFireball.class, player.getLocation().getDirection());
+                shot.setVelocity(shot.getVelocity().multiply(20.0));
+            }
+        }
+    }
+
+    @EventHandler
+    public void projectile4(PlayerInteractEvent e) {
+        Player player = e.getPlayer();
+        if (Objects.equals(e.getHand(), EquipmentSlot.HAND)) {
+            if (e.getAction().equals(Action.LEFT_CLICK_AIR) && player.getInventory().getItemInMainHand().getType().equals(Material.IRON_INGOT)) {
+                ShulkerBullet shot = player.launchProjectile(ShulkerBullet.class, player.getEyeLocation().getDirection());
+                shot.setVelocity(shot.getVelocity().multiply(20.0));
+            }
+        }
+    }
+
+    @EventHandler
+    public void projectile5(PlayerInteractEvent e) {
+        Player player = e.getPlayer();
+        if (Objects.equals(e.getHand(), EquipmentSlot.HAND)) {
+            if (e.getAction().equals(Action.LEFT_CLICK_AIR) && player.getInventory().getItemInMainHand().getType().equals(Material.DIAMOND)) {
+                SpectralArrow arrow = player.launchProjectile(SpectralArrow.class);
+                arrow.setPickupStatus(Arrow.PickupStatus.DISALLOWED);
+                arrow.setPersistent(false);
+            }
+        }
+    }
+
+    @EventHandler
+    public void playerAction(PlayerInteractEvent e) {
+        Player player = e.getPlayer();
+
+        if (e.getAction().equals(Action.RIGHT_CLICK_AIR)) {
+            if (player.getInventory().getItemInMainHand().getType().equals(Material.EMERALD) && this.active) {
+                player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,
+                        Integer.MAX_VALUE,
+                        100,
+                        false, false, false));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,
+                        Integer.MAX_VALUE,
+                        5000,
+                        false, false, false));
+                player.sendMessage(ChatColor.AQUA + " Velocidade ativada");
+                this.active = false;
+            } else if (player.getInventory().getItemInMainHand().getType().equals(Material.EMERALD)) {
+                for (PotionEffect pe : player.getActivePotionEffects()) {
+                    player.removePotionEffect(pe.getType());
+                }
+                player.sendMessage(ChatColor.AQUA + " Velocidade desativada");
+                this.active = true;
+            }
+        }
+    }
+
+    @EventHandler
+    public void icyBlockWater(PlayerMoveEvent water) {
+        Player player = water.getPlayer();
+        Block waterblock = player.getLocation().getBlock().getRelative(BlockFace.DOWN);
+
+        Block water2 = waterblock.getRelative(BlockFace.NORTH);
+        Block water3 = waterblock.getRelative(BlockFace.SOUTH);
+        Block water4 = waterblock.getRelative(BlockFace.EAST);
+        Block water5 = waterblock.getRelative(BlockFace.WEST);
+
+        Block water6 = water2.getRelative(BlockFace.NORTH);
+        Block water7 = water3.getRelative(BlockFace.SOUTH);
+        Block water8 = water4.getRelative(BlockFace.EAST);
+        Block water9 = water5.getRelative(BlockFace.WEST);
+        if (waterblock.isLiquid() && !this.active) {
+            waterblock.setType(Material.ICE);
+            water2.setType(Material.ICE);
+            water3.setType(Material.ICE);
+            water4.setType(Material.ICE);
+            water5.setType(Material.ICE);
+
+            water6.setType(Material.ICE);
+            water7.setType(Material.ICE);
+            water8.setType(Material.ICE);
+            water9.setType(Material.ICE);
         }
     }
 
