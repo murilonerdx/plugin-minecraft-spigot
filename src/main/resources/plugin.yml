@@ -18,5 +18,6 @@ commands:
     description: Banir alguém
   menu:
     description: Mostrar todos menus referentes ao servidor
-
+  hologram:
+    description: Holograma
 

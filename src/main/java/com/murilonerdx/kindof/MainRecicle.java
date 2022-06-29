@@ -10,11 +10,15 @@ import com.murilonerdx.kindof.listerner.PlayerListener;
 import com.murilonerdx.kindof.listerner.ToggleListener;
 import org.bukkit.*;
 
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 import org.bukkit.event.player.*;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
@@ -35,6 +39,7 @@ public final class MainRecicle extends JavaPlugin implements Listener {
         Objects.requireNonNull(getCommand("reply")).setExecutor(new ReplyCommand(this));
         Objects.requireNonNull(getCommand("punish")).setExecutor(new PunishCommand());
         Objects.requireNonNull(getCommand("menu")).setExecutor(new MenuCommand());
+        Objects.requireNonNull(getCommand("hologram")).setExecutor(new SpawnHologramCommand());
 
         pluginManager();
 
@@ -78,5 +83,24 @@ public final class MainRecicle extends JavaPlugin implements Listener {
 
     public HashMap<UUID, UUID> getRecentMessages() {
         return recentMessages;
+    }
+
+    public void customCraftingRecipes(){
+        ItemStack is = new ItemStack(Material.STICK);
+        is.addUnsafeEnchantment(Enchantment.DURABILITY, 1);
+        ItemMeta isMeta = is.getItemMeta();
+        Objects.requireNonNull(isMeta).setDisplayName(ChatColor.BLUE.toString() + ChatColor.BOLD + "Stick customizado");
+        is.setItemMeta(isMeta);
+
+        ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(this, "custom_diamond_sword"), is);
+        recipe.shape(
+                "R R",
+                " R ",
+                "R R"
+        );
+
+        recipe.setIngredient('R', Material.GOLD_INGOT);
+        recipe.setIngredient('G', Material.STICK);
+        Bukkit.addRecipe(recipe);
     }
 }
