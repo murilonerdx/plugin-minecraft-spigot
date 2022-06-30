@@ -40,6 +40,7 @@ public final class MainRecicle extends JavaPlugin implements Listener {
         Objects.requireNonNull(getCommand("punish")).setExecutor(new PunishCommand());
         Objects.requireNonNull(getCommand("menu")).setExecutor(new MenuCommand());
         Objects.requireNonNull(getCommand("hologram")).setExecutor(new SpawnHologramCommand());
+        Objects.requireNonNull(getCommand("perms")).setExecutor(new PermsCommand(this));
 
         pluginManager();
 

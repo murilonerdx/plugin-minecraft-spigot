@@ -20,4 +20,6 @@ commands:
     description: Mostrar todos menus referentes ao servidor
   hologram:
     description: Holograma
+  perms:
+    description: Permissões
 
