@@ -6,6 +6,7 @@ import com.murilonerdx.kindof.events.EffectEvent;
 import com.murilonerdx.kindof.events.ProjectileEvent;
 import com.murilonerdx.kindof.events.ServerEvent;
 import com.murilonerdx.kindof.listerner.MenuListener;
+import com.murilonerdx.kindof.listerner.NametagListener;
 import com.murilonerdx.kindof.listerner.PlayerListener;
 import com.murilonerdx.kindof.listerner.ToggleListener;
 import org.bukkit.*;
@@ -33,19 +34,20 @@ public final class MainRecicle extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
-        getConfig().options().copyDefaults();
-        saveDefaultConfig();
+        Bukkit.getPluginManager().registerEvents(new NametagListener(), this);
 
-        Objects.requireNonNull(getCommand("config")).setExecutor(new ConfigCommand(this));
-        Objects.requireNonNull(getCommand("heal")).setExecutor(new HealCommand());
-        Objects.requireNonNull(getCommand("message")).setExecutor(new MessageCommand(this));
-        Objects.requireNonNull(getCommand("reply")).setExecutor(new ReplyCommand(this));
-        Objects.requireNonNull(getCommand("punish")).setExecutor(new PunishCommand());
-        Objects.requireNonNull(getCommand("menu")).setExecutor(new MenuCommand());
-        Objects.requireNonNull(getCommand("hologram")).setExecutor(new SpawnHologramCommand());
-        Objects.requireNonNull(getCommand("perms")).setExecutor(new PermsCommand(this));
-
-        pluginManager();
+//        getConfig().options().copyDefaults();
+//        saveDefaultConfig();
+//        Objects.requireNonNull(getCommand("config")).setExecutor(new ConfigCommand(this));
+//        Objects.requireNonNull(getCommand("heal")).setExecutor(new HealCommand());
+//        Objects.requireNonNull(getCommand("message")).setExecutor(new MessageCommand(this));
+//        Objects.requireNonNull(getCommand("reply")).setExecutor(new ReplyCommand(this));
+//        Objects.requireNonNull(getCommand("punish")).setExecutor(new PunishCommand());
+//        Objects.requireNonNull(getCommand("menu")).setExecutor(new MenuCommand());
+//        Objects.requireNonNull(getCommand("hologram")).setExecutor(new SpawnHologramCommand());
+//        Objects.requireNonNull(getCommand("perms")).setExecutor(new PermsCommand(this));
+//
+//        pluginManager();
 
 //        Bukkit.getScheduler().runTaskLater(this, () -> {
 //            for(Player player : Bukkit.getOnlinePlayers()){
@@ -61,15 +63,15 @@ public final class MainRecicle extends JavaPlugin implements Listener {
 
     }
 
-    @EventHandler
-    public void onJoin(PlayerJoinEvent e) {
-        Bukkit.getPluginManager().registerEvents(new ToggleListener(), this);
-        Bukkit.getPluginManager().registerEvents(new PlayerListener(), this);
-        Bukkit.getPluginManager().registerEvents(new EffectEvent(), this);
-        Bukkit.getPluginManager().registerEvents(new ProjectileEvent(), this);
-        Bukkit.getPluginManager().registerEvents(new ServerEvent(this), this);
-        Bukkit.getPluginManager().registerEvents(new MenuListener(), this);
-    }
+//    @EventHandler
+//    public void onJoin(PlayerJoinEvent e) {
+//        Bukkit.getPluginManager().registerEvents(new ToggleListener(), this);
+//        Bukkit.getPluginManager().registerEvents(new PlayerListener(), this);
+//        Bukkit.getPluginManager().registerEvents(new EffectEvent(), this);
+//        Bukkit.getPluginManager().registerEvents(new ProjectileEvent(), this);
+//        Bukkit.getPluginManager().registerEvents(new ServerEvent(this), this);
+//        Bukkit.getPluginManager().registerEvents(new MenuListener(), this);
+//    }
 
     @EventHandler
     public void onJoinScoreBoard(PlayerJoinEvent e){
