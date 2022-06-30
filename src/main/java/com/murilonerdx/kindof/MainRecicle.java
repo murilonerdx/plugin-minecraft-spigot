@@ -15,15 +15,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scoreboard.DisplaySlot;
-import org.bukkit.scoreboard.Objective;
-import org.bukkit.scoreboard.Score;
-import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.*;
 
 import java.util.HashMap;
 import java.util.Objects;
@@ -31,6 +29,7 @@ import java.util.UUID;
 
 public final class MainRecicle extends JavaPlugin implements Listener {
     HashMap<UUID, UUID> recentMessages = new HashMap<>();
+    HashMap<UUID, Integer> blockBroken = new HashMap<>();
 
     @Override
     public void onEnable() {
@@ -91,7 +90,26 @@ public final class MainRecicle extends JavaPlugin implements Listener {
         Score name = obj.getScore(ChatColor.BLUE + "Name: "  +player.getName());
         name.setScore(3);
 
+        Team blocksBroken = board.registerNewTeam("blocksbroken");
+        blocksBroken.addEntry(ChatColor.BOLD.toString());
+        blocksBroken.setPrefix(ChatColor.BLUE + "Blocks borken: ");
+        blocksBroken.setSuffix(ChatColor.YELLOW + "0");
+        obj.getScore(ChatColor.BOLD.toString()).setScore(3);
+
         player.setScoreboard(board);
+
+        this.blockBroken.put(player.getUniqueId(), 0);
+    }
+
+    @EventHandler
+    public void onBlockBreak(BlockBreakEvent e){
+        Player player = e.getPlayer();
+
+        int amount = blockBroken.get(player.getUniqueId());
+        amount++;
+
+        blockBroken.put(player.getUniqueId(), amount);
+        player.getScoreboard().getTeam("blocksbroken").setSuffix(ChatColor.YELLOW.toString() + amount);
     }
 
     public void pluginManager() {
