@@ -20,6 +20,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Score;
+import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.HashMap;
 import java.util.Objects;
@@ -66,6 +70,28 @@ public final class MainRecicle extends JavaPlugin implements Listener {
         Bukkit.getPluginManager().registerEvents(new ProjectileEvent(), this);
         Bukkit.getPluginManager().registerEvents(new ServerEvent(this), this);
         Bukkit.getPluginManager().registerEvents(new MenuListener(), this);
+    }
+
+    @EventHandler
+    public void onJoinScoreBoard(PlayerJoinEvent e){
+        Player player = e.getPlayer();
+
+        Scoreboard board = Bukkit.getScoreboardManager().getNewScoreboard();
+
+        Objective obj = board.registerNewObjective("testboard", "dummy");
+        obj.setDisplayName(ChatColor.GREEN.toString() + ChatColor.BOLD + "Test Board!");
+        obj.setDisplaySlot(DisplaySlot.SIDEBAR);
+
+        Score website = obj.getScore(ChatColor.YELLOW + "www.github.com/murilonerdx");
+        website.setScore(1);
+
+        Score space = obj.getScore(" ");
+        space.setScore(2);
+
+        Score name = obj.getScore(ChatColor.BLUE + "Name: "  +player.getName());
+        name.setScore(3);
+
+        player.setScoreboard(board);
     }
 
     public void pluginManager() {
