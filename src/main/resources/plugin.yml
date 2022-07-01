@@ -22,4 +22,6 @@ commands:
     description: Holograma
   perms:
     description: Permissões
+  book:
+    description: Book custom
 

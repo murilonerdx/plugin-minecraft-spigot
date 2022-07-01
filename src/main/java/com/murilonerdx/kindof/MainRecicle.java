@@ -35,6 +35,8 @@ public final class MainRecicle extends JavaPlugin implements Listener {
     @Override
     public void onEnable() {
         Bukkit.getPluginManager().registerEvents(new NametagListener(), this);
+        Objects.requireNonNull(getCommand("book")).setExecutor(new BookCommand());
+
 
 //        getConfig().options().copyDefaults();
 //        saveDefaultConfig();
@@ -74,7 +76,7 @@ public final class MainRecicle extends JavaPlugin implements Listener {
 //    }
 
     @EventHandler
-    public void onJoinScoreBoard(PlayerJoinEvent e){
+    public void onJoinScoreBoard(PlayerJoinEvent e) {
         Player player = e.getPlayer();
 
         Scoreboard board = Bukkit.getScoreboardManager().getNewScoreboard();
@@ -89,7 +91,7 @@ public final class MainRecicle extends JavaPlugin implements Listener {
         Score space = obj.getScore(" ");
         space.setScore(2);
 
-        Score name = obj.getScore(ChatColor.BLUE + "Name: "  +player.getName());
+        Score name = obj.getScore(ChatColor.BLUE + "Name: " + player.getName());
         name.setScore(3);
 
         Team blocksBroken = board.registerNewTeam("blocksbroken");
@@ -104,7 +106,7 @@ public final class MainRecicle extends JavaPlugin implements Listener {
     }
 
     @EventHandler
-    public void onBlockBreak(BlockBreakEvent e){
+    public void onBlockBreak(BlockBreakEvent e) {
         Player player = e.getPlayer();
 
         int amount = blockBroken.get(player.getUniqueId());
@@ -132,7 +134,7 @@ public final class MainRecicle extends JavaPlugin implements Listener {
         return recentMessages;
     }
 
-    public void customCraftingRecipes(){
+    public void customCraftingRecipes() {
         ItemStack is = new ItemStack(Material.STICK);
         is.addUnsafeEnchantment(Enchantment.DURABILITY, 1);
         ItemMeta isMeta = is.getItemMeta();
