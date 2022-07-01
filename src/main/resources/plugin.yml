@@ -24,4 +24,6 @@ commands:
     description: Permissões
   book:
     description: Book custom
+  broadcast:
+    description: Evento
 

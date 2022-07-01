@@ -4,6 +4,7 @@ import com.murilonerdx.kindof.commands.*;
 import com.murilonerdx.kindof.config.ConfigCommand;
 import com.murilonerdx.kindof.events.EffectEvent;
 import com.murilonerdx.kindof.events.ProjectileEvent;
+import com.murilonerdx.kindof.events.ServerBroadcastEvent;
 import com.murilonerdx.kindof.events.ServerEvent;
 import com.murilonerdx.kindof.listerner.MenuListener;
 import com.murilonerdx.kindof.listerner.NametagListener;
@@ -36,6 +37,7 @@ public final class MainRecicle extends JavaPlugin implements Listener {
     public void onEnable() {
         Bukkit.getPluginManager().registerEvents(new NametagListener(), this);
         Objects.requireNonNull(getCommand("book")).setExecutor(new BookCommand());
+        Objects.requireNonNull(getCommand("broadcast")).setExecutor(new BroadcastCommand());
 
 
 //        getConfig().options().copyDefaults();
@@ -74,6 +76,11 @@ public final class MainRecicle extends JavaPlugin implements Listener {
 //        Bukkit.getPluginManager().registerEvents(new ServerEvent(this), this);
 //        Bukkit.getPluginManager().registerEvents(new MenuListener(), this);
 //    }
+
+    @EventHandler
+    public void onBroadcast(ServerBroadcastEvent e){
+        System.out.println("Event run: " + e.getMessage());
+    }
 
     @EventHandler
     public void onJoinScoreBoard(PlayerJoinEvent e) {
