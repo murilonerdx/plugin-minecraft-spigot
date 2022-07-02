@@ -26,4 +26,6 @@ commands:
     description: Book custom
   broadcast:
     description: Evento
+depend:
+  - [WorldEdit]
 
