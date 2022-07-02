@@ -26,6 +26,8 @@ commands:
     description: Book custom
   broadcast:
     description: Evento
+  playsong:
+    description: Iniciar musica
 depend:
-  - [WorldEdit]
+  [NoteBlockAPI]
 

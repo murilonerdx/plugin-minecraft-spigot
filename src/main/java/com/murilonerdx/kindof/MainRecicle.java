@@ -10,8 +10,7 @@ import com.murilonerdx.kindof.listerner.MenuListener;
 import com.murilonerdx.kindof.listerner.NametagListener;
 import com.murilonerdx.kindof.listerner.PlayerListener;
 import com.murilonerdx.kindof.listerner.ToggleListener;
-import com.sk89q.worldedit.WorldEdit;
-import com.sk89q.worldedit.extension.factory.ItemFactory;
+
 import org.bukkit.*;
 
 import org.bukkit.enchantments.Enchantment;
@@ -40,9 +39,15 @@ public final class MainRecicle extends JavaPlugin implements Listener {
         Bukkit.getPluginManager().registerEvents(new NametagListener(), this);
         Objects.requireNonNull(getCommand("book")).setExecutor(new BookCommand());
         Objects.requireNonNull(getCommand("broadcast")).setExecutor(new BroadcastCommand());
+        Objects.requireNonNull(getCommand("playsong")).setExecutor(new PlaySongCommand(this));
 
-        WorldEdit we = WorldEdit.getInstance();
-        ItemFactory itemFactory = we.getItemFactory();
+//        WorldEdit we = WorldEdit.getInstance();
+//        ItemFactory itemFactory = we.getItemFactory();
+//        System.out.println(itemFactory);
+
+        if(!this.getDataFolder().exists()){
+            this.getDataFolder().mkdir();
+        }
 
 
 //        getConfig().options().copyDefaults();
